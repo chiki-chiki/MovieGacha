@@ -79,6 +79,21 @@
 
 ---
 
+## 2026-08-21〜2026-08-24: Vercelデプロイのトラブルシューティング
+
+初回デプロイ時、リポジトリに`package.json`も実体のあるコードも無く(空の`index.js`のみ)、Vercelがエントリーポイントを検出できずビルド失敗(`No entrypoint found`)。
+
+- 対応: 技術選定通りNext.js(App Router, TypeScript)の最小構成を作成(`package.json`, `tsconfig.json`, `app/layout.tsx`, `app/page.tsx`)し、不要になった空の`index.js`を削除。ローカルで`npm run build`が通ることを確認
+- コミット・プッシュしてVercelでredeployすると、今度は`500 FUNCTION_INVOCATION_FAILED`(`No exports found in module "/var/task/index.mjs"`)で開けない事象が発生
+  - 原因: Vercelプロジェクトの**Framework Presetが「Next.js」ではなく「Other(Node.js)」に固定**されていた。`package.json`が存在しなかった最初の失敗デプロイ時にVercel側で決定された設定が残っていたため
+  - Framework PresetをNext.jsに変更 → 今度は`No Next.js version detected`エラー。Root Directoryは空欄(正しい)だったにもかかわらず発生
+  - 原因(推定): Vercelの「Redeploy」は対象デプロイ作成時点の設定スナップショットを使う仕様のため、古い(壊れていた時点の)デプロイをRedeployしても現在のProject Settingsが反映されない。Framework Settings画面に出た「Configuration Settings in the current Production deployment differ from your current Project Settings」という警告がこれを裏付けていた
+- **最終的な解決策**: Vercelプロジェクト自体を削除して作り直す ことで解消。設定の個別修正やRedeployでは古いスナップショットを引きずり続けたため、まっさらな状態からプロジェクトを再作成するのが最も確実だった
+
+**学び**: プロジェクトの初期状態(`package.json`無し等)でVercelに一度デプロイを試すと、後から正しい構成に直しても、Vercel側のプロジェクト設定(Framework Preset・デプロイスナップショット)が古いまま引き継がれ、通常の設定変更やRedeployでは直らないことがある。次回似た状況になったら、個別設定を追いかけるより先にプロジェクトの作り直しを検討する方が早い可能性が高い。
+
+---
+
 ## 未決定・today以降の検討事項
 
 - ガチャ演出の具体的な見た目・所要時間
