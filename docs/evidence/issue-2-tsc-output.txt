@@ -1,0 +1,7 @@
+$ npx tsc --noEmit
+date: 2026-09-06T02:40:36Z
+node: v22.22.2
+npm: 10.9.7
+----
+----
+exit code: 0
