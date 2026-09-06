@@ -1,0 +1,39 @@
+$ psql -f supabase/migrations/20260906133513_create_lists_and_list_movies.sql
+date: 2026-09-06T13:35:24Z
+postgres: PostgreSQL 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+----
+NOTICE:  database "moviegacha_evidence" does not exist, skipping
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+----
+                                Table "public.lists"
+    Column    |           Type           | Collation | Nullable |      Default      
+--------------+--------------------------+-----------+----------+-------------------
+ id           | uuid                     |           | not null | gen_random_uuid()
+ name         | text                     |           | not null | 
+ creator_name | text                     |           | not null | 
+ created_at   | timestamp with time zone |           | not null | now()
+Indexes:
+    "lists_pkey" PRIMARY KEY, btree (id)
+Referenced by:
+    TABLE "list_movies" CONSTRAINT "list_movies_list_id_fkey" FOREIGN KEY (list_id) REFERENCES lists(id) ON DELETE CASCADE
+
+                            Table "public.list_movies"
+   Column    |           Type           | Collation | Nullable |      Default      
+-------------+--------------------------+-----------+----------+-------------------
+ id          | uuid                     |           | not null | gen_random_uuid()
+ list_id     | uuid                     |           | not null | 
+ tmdb_id     | integer                  |           | not null | 
+ title       | text                     |           | not null | 
+ poster_path | text                     |           |          | 
+ overview    | text                     |           | not null | 
+ added_at    | timestamp with time zone |           | not null | now()
+Indexes:
+    "list_movies_pkey" PRIMARY KEY, btree (id)
+    "list_movies_list_id_idx" btree (list_id)
+Foreign-key constraints:
+    "list_movies_list_id_fkey" FOREIGN KEY (list_id) REFERENCES lists(id) ON DELETE CASCADE
+
+----
+exit code: 0
