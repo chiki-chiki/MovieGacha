@@ -16,11 +16,13 @@
 Explore → Plan → Code → Commit (EPCC) サイクルで進める。
 
 1. **Explore**: 対象Issueに関連する既存コード・依存関係を確認する
-2. **Plan**: 変更内容を具体的に(ファイル単位で)まとめ、着手前にユーザーに提示する
-3. **Code**: Planに沿って実装し、`tsc --noEmit` や `next build` 等で検証する
-   (可能な範囲でエビデンスを `docs/evidence/` に残す)
+2. **Plan**: 変更内容を具体的に(ファイル単位で)まとめ、**受け入れ条件に対応する
+   テストコードをこの時点で作成する**。実装本体より先にテストを用意し、
+   着手前にユーザーに提示する
+3. **Code**: Planで用意したテストが通るように実装し、`npm test`・`tsc --noEmit`・
+   `next build` 等で検証する(可能な範囲でエビデンスを `docs/evidence/` に残す)
 4. **Commit**: 1 Issue = 1コミットとしてコミットメッセージに `Closes #N` を含め、
-   ブランチにpushしてPRを作成する
+   ブランチにpushしてPRを作成する(テストコードも同じコミットに含める)
 
 **重要**: 複数のIssueを続けてまとめて実装しない。1つのIssueのEPCCサイクルが
 完了したら区切りとし、次のIssueに進む前にユーザーの確認を挟む。
@@ -29,5 +31,7 @@ Explore → Plan → Code → Commit (EPCC) サイクルで進める。
 ## その他の注意
 
 - 技術スタックはSupabase(Postgres) + Next.js。詳細は `movie-gacha-spec.md` セクション5
+- テストランナーはVitest。`npm test`で実行。テストファイルは対象コードと同じ
+  ディレクトリに`*.test.ts`として置く(例: `lib/tmdb.ts` → `lib/tmdb.test.ts`)
 - 本番のSupabase/TMDB認証情報はサンドボックス環境には無いため、実際のAPI連携は
   ビルド・型チェック・(可能であれば)ローカルDBでの検証に留める
