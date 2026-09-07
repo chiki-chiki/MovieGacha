@@ -1,0 +1,17 @@
+$ npx vitest run
+date: 2026-09-06T22:16:52Z
+----
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+ RUN  v2.1.9 /home/user/MovieGacha
+
+ ✓ lib/tmdb.test.ts (4 tests) 6ms
+ ✓ app/api/tmdb/search/route.test.ts (2 tests) 12ms
+
+ Test Files  2 passed (2)
+      Tests  6 passed (6)
+   Start at  22:16:53
+   Duration  393ms (transform 107ms, setup 0ms, collect 141ms, tests 19ms, environment 0ms, prepare 113ms)
+
+----
+exit code: 0
