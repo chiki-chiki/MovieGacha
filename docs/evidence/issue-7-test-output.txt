@@ -1,0 +1,18 @@
+$ npm test
+date: 2026-09-07T23:31:13Z
+----
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+ RUN  v2.1.9 /home/user/MovieGacha
+
+ ✓ lib/tmdb.test.ts (4 tests) 8ms
+ ✓ app/api/lists/route.test.ts (4 tests) 17ms
+ ✓ app/api/lists/[id]/movies/route.test.ts (5 tests) 19ms
+ ✓ app/api/tmdb/search/route.test.ts (2 tests) 15ms
+
+ Test Files  4 passed (4)
+      Tests  15 passed (15)
+   Start at  23:31:13
+   Duration  861ms (transform 249ms, setup 0ms, collect 414ms, tests 59ms, environment 1ms, prepare 357ms)
+
+----
