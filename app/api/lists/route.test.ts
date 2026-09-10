@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { supabase } from "@/lib/supabase";
-import { POST } from "./route";
+import { GET, POST } from "./route";
 
 vi.mock("@/lib/supabase", () => ({
   supabase: {
@@ -76,6 +76,80 @@ describe("POST /api/lists", () => {
     const response = await POST(
       postRequest({ name: "おすすめ映画", creator_name: "太郎" })
     );
+
+    expect(response.status).toBe(500);
+  });
+});
+
+describe("GET /api/lists", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("リストが無い場合は空配列を返す", async () => {
+    const orderMock = vi.fn().mockResolvedValue({ data: [], error: null });
+    const selectMock = vi.fn().mockReturnValue({ order: orderMock });
+    vi.mocked(supabase.from).mockReturnValue({ select: selectMock } as never);
+
+    const response = await GET();
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.lists).toEqual([]);
+  });
+
+  it("リストをmovie_count付きで、作成日時の降順で返す", async () => {
+    const rows = [
+      {
+        id: "list-2",
+        name: "新しいリスト",
+        creator_name: "花子",
+        created_at: "2026-09-08T00:00:00.000Z",
+        list_movies: [{ count: 3 }],
+      },
+      {
+        id: "list-1",
+        name: "古いリスト",
+        creator_name: "太郎",
+        created_at: "2026-09-01T00:00:00.000Z",
+        list_movies: [{ count: 0 }],
+      },
+    ];
+    const orderMock = vi.fn().mockResolvedValue({ data: rows, error: null });
+    const selectMock = vi.fn().mockReturnValue({ order: orderMock });
+    vi.mocked(supabase.from).mockReturnValue({ select: selectMock } as never);
+
+    const response = await GET();
+    const body = await response.json();
+
+    expect(supabase.from).toHaveBeenCalledWith("lists");
+    expect(orderMock).toHaveBeenCalledWith("created_at", { ascending: false });
+    expect(body.lists).toEqual([
+      {
+        id: "list-2",
+        name: "新しいリスト",
+        creator_name: "花子",
+        created_at: "2026-09-08T00:00:00.000Z",
+        movie_count: 3,
+      },
+      {
+        id: "list-1",
+        name: "古いリスト",
+        creator_name: "太郎",
+        created_at: "2026-09-01T00:00:00.000Z",
+        movie_count: 0,
+      },
+    ]);
+  });
+
+  it("DBエラー時は500を返す", async () => {
+    const orderMock = vi
+      .fn()
+      .mockResolvedValue({ data: null, error: { message: "db error" } });
+    const selectMock = vi.fn().mockReturnValue({ order: orderMock });
+    vi.mocked(supabase.from).mockReturnValue({ select: selectMock } as never);
+
+    const response = await GET();
 
     expect(response.status).toBe(500);
   });
