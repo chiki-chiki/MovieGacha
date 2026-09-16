@@ -1,0 +1,21 @@
+
+> movie-gacha@0.1.0 test
+> vitest run
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+ RUN  v2.1.9 /home/user/MovieGacha
+
+ ✓ app/api/lists/[id]/gacha/route.test.ts (7 tests) 12ms
+ ✓ app/api/lists/[id]/movies/[movieId]/route.test.ts (4 tests) 13ms
+ ✓ app/api/lists/route.test.ts (7 tests) 21ms
+ ✓ lib/tmdb.test.ts (4 tests) 6ms
+ ✓ app/api/lists/[id]/movies/route.test.ts (5 tests) 16ms
+ ✓ app/api/lists/[id]/route.test.ts (4 tests) 15ms
+ ✓ app/api/tmdb/search/route.test.ts (2 tests) 10ms
+
+ Test Files  7 passed (7)
+      Tests  33 passed (33)
+   Start at  13:12:01
+   Duration  988ms (transform 309ms, setup 0ms, collect 537ms, tests 94ms, environment 1ms, prepare 430ms)
+
